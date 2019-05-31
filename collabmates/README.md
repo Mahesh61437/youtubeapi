@@ -49,3 +49,8 @@ in the url section use this following url
 localhost:8000/search/query     #query can be any keyword you want to search
 use POST method if you only want to save the data into database
 else use GET method to get a json response in postman app
+
+the url that has to be used is like
+
+For new quries(POST METHOD) : http://localhost:8000/search/avengers       #  avengers is the query here,you can change as you want
+for GET method   :   http://localhost:8000/search/avengers/page/1/        #  1 can be replaced with page numbers

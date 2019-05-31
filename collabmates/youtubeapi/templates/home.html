@@ -5,7 +5,7 @@
 
 <body>
 
-
+<!-- search area -->
     <header>
         <h3 class="h6">Search the blog</h3>
     </header>
@@ -15,12 +15,14 @@
         <button type="submit" onClick="showHideDiv('divMsg')">search</button>
         </div>
     </form>
-
+<!-- print the data from paginated query set -->
     {% for Q in search_objects %}
     {{Q.title}}<br/>
     {{Q.description}}<br/>
     {{Q.datetime}}<br/>
     {{Q.thumbnail}}<br/>
+
+    <br/><br/>
 {% endfor %}
                         {% load mathfilters %}
                     {% if is_paginated %}

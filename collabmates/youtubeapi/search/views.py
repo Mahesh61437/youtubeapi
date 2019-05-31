@@ -15,13 +15,20 @@ YOUTUBE_API_VERSION = 'v3'
 
 @csrf_exempt
 def youtube_search(request,query,num=1):
-
+ 
+    #checking if the method is GET Or POST
     if request.method=='GET':
         Q = SearchDetail.objects.all().filter(query = query).order_by('-datetime')
+        #cheking if the query already exists i the database
+        if not Q.exists():
+            #if query is not in the database,throw an error
+            json_res={"message":"Bad RequestUse POST method for new quries" }
+            return JsonResponse(json_res)
+        #else return a json file with required data
         json_res=[]
         page_request_var = 'page'
         page = request.GET.get(page_request_var)
-        paginator = Paginator(Q, 10)
+        paginator = Paginator(Q, 10)  #paginating the queryset
         try:
             paginated_queryset = paginator.page(num)
         except PageNotAnInteger:
@@ -34,11 +41,11 @@ def youtube_search(request,query,num=1):
             json_res.append(json)
         return JsonResponse(json_res,safe=False)
 
-    #print(query)
+    #pcheck if the mrthod is POST
     if request.method=="POST":
-        query = request.GET.get('q')
 
         Q = SearchDetail.objects.all().filter(query = query).order_by('-datetime')
+#check if query is in the database, if not , fetch the details from youtube api and stre it to the database
         if not Q.exists() : 
             youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,developerKey=DEVELOPER_KEY)
             search_response = youtube.search().list(q=query,part='id,snippet',maxResults=20,order = 'date', publishedAfter='2010-01-01T00:00:00Z').execute()
@@ -56,7 +63,7 @@ def youtube_search(request,query,num=1):
                 new.save()
 
             return JsonResponse(json_res,safe=False)
-
+#if query already exists , then just return the data associated with the query
         else:
             json_res = []
             success={"status": "True" ,"status code" : 200,"message":"Query already exists,Use GET method to get Data"}

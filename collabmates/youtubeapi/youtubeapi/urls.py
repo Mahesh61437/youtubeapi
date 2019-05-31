@@ -15,12 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,re_path
-from search.views import youtube_search,YoutubeSearchView
+from search.views import youtube_search
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     
     re_path(r'search/(?P<query>\w+)/page/(?P<num>[0-9]+)/', youtube_search),
     re_path(r'search/(?P<query>\w+)/', youtube_search),
-
+    
 ]
